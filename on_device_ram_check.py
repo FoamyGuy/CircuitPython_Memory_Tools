@@ -1,9 +1,10 @@
 import json
-
+import zipfile
 import serial
+import os
 
 
-def get_ram_size(module_name, device_path):
+def get_ram_size(zip_file, module_name, device_serial_path, device_file_path):
 
     def try_read_ram_size(verbose=False):
         if ser.in_waiting:
@@ -20,6 +21,17 @@ def get_ram_size(module_name, device_path):
                 except ValueError:
                     pass
 
+    def unzip_file():
+        with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+            zip_ref.extractall("./")
+
+    def push_file_to_device_libs(file):
+        os.system(f"cp {file} {device_file_path}/lib/")
+
+    unzip_file()
+    mpy_file = f'{zip_file.replace(".zip", "")}/lib/{module_name}.mpy'
+    push_file_to_device_libs(mpy_file)
+
     import_memory_test_script = b"""
 import gc\r
 import json\r
@@ -35,7 +47,7 @@ time.sleep(0.2)\r
 print(json.dumps({"ram_size": gc.mem_alloc() - before}))\r\n
 """
 
-    ser = serial.Serial(device_path, timeout=0.5)  # open serial port
+    ser = serial.Serial(device_serial_path, timeout=0.5)  # open serial port
     print(ser.name)  # check which port was really used
     ser.write(b'\x04')  # write a string
     #try_read_ram_size()
