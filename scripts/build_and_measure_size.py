@@ -2,8 +2,8 @@ import os
 import shutil
 import subprocess
 
-#REPO_URL = "https://github.com/adafruit/Adafruit_CircuitPython_SI1145.git"
-REPO_URL = "https://github.com/adafruit/Adafruit_CircuitPython_BLE_iBBQ.git"
+REPO_URL = "https://github.com/adafruit/Adafruit_CircuitPython_SI1145.git"
+#REPO_URL = "https://github.com/adafruit/Adafruit_CircuitPython_BLE_iBBQ.git"
 BRANCH_NAME = "main"
 
 
