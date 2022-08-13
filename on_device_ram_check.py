@@ -29,7 +29,7 @@ def get_ram_size(zip_file, module_name, device_serial_path, device_file_path):
         os.system(f"cp {file} {device_file_path}/lib/")
 
     unzip_file()
-    mpy_file = f'{zip_file.replace(".zip", "")}/lib/{module_name}.mpy'
+    mpy_file = f'{zip_file.replace(".zip", "")}/lib/{module_name.decode("utf-8")}.mpy'
     push_file_to_device_libs(mpy_file)
 
     import_memory_test_script = b"""
