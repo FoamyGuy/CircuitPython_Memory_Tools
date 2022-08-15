@@ -10,7 +10,7 @@ def download_latest_bundle():
 
     for asset in json_resp["assets"]:
         if "adafruit-circuitpython-bundle-8" in asset["name"]:
-            print(asset["browser_download_url"])
+            #print(asset["browser_download_url"])
             bundle_zip = requests.get(asset["browser_download_url"], allow_redirects=True)
             download_filename = asset["browser_download_url"].split("/")[-1]
             bundle_out = open(download_filename, 'wb')
@@ -54,7 +54,9 @@ def measure_sizes(module_name):
         print(f"strings percentage of mpy: {(string_file_stats.st_size / file_stats.st_size) * 100.0:.2f}%")
 
     # Published Version:
-    print("===========")
+    print()
+    print("---")
+    print()
     print("Published Version:")
     downloaded_filename = download_latest_bundle()
     os.chdir(downloaded_filename.replace(".zip", ""))
