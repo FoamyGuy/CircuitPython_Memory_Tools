@@ -4,8 +4,8 @@ import os
 def find_v8_mpy_zip():
     for file in os.listdir("./"):
         if "8.x-mpy" in file:
-            print("Found 8.x mpy zip:")
-            print(file)
+            #print("Found 8.x mpy zip:")
+            #print(file)
             return file
 
 
