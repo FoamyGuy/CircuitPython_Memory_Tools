@@ -1,7 +1,9 @@
 import os
+import sys
 import zipfile
 
 import requests
+import toml
 
 
 def download_latest_bundle():
@@ -34,12 +36,8 @@ def find_v8_mpy_zip():
 def get_sizes_from_dir(dir_path, verbose=False):
     total_size = 0
     total_strings_size = 0
-    # print(os.listdir(os.listdir("./")[0]))
-    print(os.getcwd())
-    print(dir_path)
-    for subdir_tuple in os.walk(dir_path):
-        print(subdir_tuple)
 
+    for subdir_tuple in os.walk(dir_path):
         for mpy_file in subdir_tuple[2]:
             cur_file_path = f"{subdir_tuple[0]}{'/' if subdir_tuple[0][-1] != '/' else ''}{mpy_file}"
             if verbose:
@@ -61,14 +59,22 @@ def get_sizes_from_dir(dir_path, verbose=False):
     return total_size, total_strings_size
 
 
-def measure_sizes(module_name):
-    # New Version:
+def measure_sizes():
+    # read module name from pyproject.toml
+    pyproject_data = toml.load("pyproject.toml")
+    if "packages" in pyproject_data["tool"]["setuptools"]:
 
+        module_name = pyproject_data["tool"]["setuptools"]["packages"][0]
+    elif "py-modules" in pyproject_data["tool"]["setuptools"]["py-modules"][0]:
+        module_name = pyproject_data["tool"]["setuptools"]["py-modules"][0]
+
+
+    # New Version:
     found_v8_mpy_zip = find_v8_mpy_zip()
     os.chdir(found_v8_mpy_zip)
     os.chdir(os.listdir("./")[0])
     os.chdir("lib")
-    print(os.getcwd())
+
     if os.path.isfile(os.listdir("./")[0]):
         mpy_file = os.listdir("./")[0]
         file_stats = os.stat(mpy_file)
@@ -85,9 +91,8 @@ def measure_sizes(module_name):
         print(f'strings output size: {string_file_stats.st_size} bytes')
         print(f"strings percentage of mpy: {(string_file_stats.st_size / file_stats.st_size) * 100.0:.2f}%")
     else:
-        print("need to handle directory!")
         os.chdir(os.listdir("./")[0])
-        file_size, strings_size = get_sizes_from_dir("./", verbose=True)
+        file_size, strings_size = get_sizes_from_dir("./", verbose=False)
         print("Modified Version:")
         print(f'total mpy files size: {file_size} bytes')
         print(f'strings output size: {strings_size} bytes')
@@ -116,7 +121,7 @@ def measure_sizes(module_name):
     else:  # single mpy file not found
         package_name = single_mpy_file.replace(".mpy", "")
         os.chdir(package_name)
-        file_size, strings_size = get_sizes_from_dir("./", verbose=True)
+        file_size, strings_size = get_sizes_from_dir("./", verbose=False)
 
         print(f'total mpy files size: {file_size} bytes')
         print(f'strings output size: {strings_size} bytes')
@@ -125,4 +130,5 @@ def measure_sizes(module_name):
 
 
 if __name__ == '__main__':
-    measure_sizes("adafruit_displayio_layout")
+        measure_sizes()
+
