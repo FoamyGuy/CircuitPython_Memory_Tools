@@ -65,7 +65,7 @@ def measure_sizes():
     if "packages" in pyproject_data["tool"]["setuptools"]:
 
         module_name = pyproject_data["tool"]["setuptools"]["packages"][0]
-    elif "py-modules" in pyproject_data["tool"]["setuptools"]["py-modules"][0]:
+    elif "py-modules" in pyproject_data["tool"]["setuptools"]:
         module_name = pyproject_data["tool"]["setuptools"]["py-modules"][0]
 
 
