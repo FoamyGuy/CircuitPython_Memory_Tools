@@ -78,7 +78,7 @@ def measure_sizes():
     if os.path.isfile(os.listdir("./")[0]):
         mpy_file = os.listdir("./")[0]
         file_stats = os.stat(mpy_file)
-        print("Modified Version:")
+        print("This Branch Version:")
         print(f'mpy file size: {file_stats.st_size} bytes')
 
         # command = ['strings', mpy_file]
@@ -93,7 +93,7 @@ def measure_sizes():
     else:
         os.chdir(os.listdir("./")[0])
         file_size, strings_size = get_sizes_from_dir("./", verbose=False)
-        print("Modified Version:")
+        print("This Branch Version:")
         print(f'total mpy files size: {file_size} bytes')
         print(f'strings output size: {strings_size} bytes')
         if file_size != 0:
